@@ -63,5 +63,5 @@ AWS_USE_PATH_STYLE_ENDPOINT=false
 
 VITE_APP_NAME="${APP_NAME}"
 
-SHOPIFY_STORE="https://xxxxxx.myshopify.com"
+SHOPIFY_STORE="https://xxxxxxx.myshopify.com"
 SHOPIFY_TOKEN="xxxxxxx"
