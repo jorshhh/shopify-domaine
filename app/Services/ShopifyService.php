@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Models\Cart;
+use Illuminate\Http\Client\ConnectionException;
 use Illuminate\Http\Client\PendingRequest;
 
 class ShopifyService
@@ -11,6 +12,9 @@ class ShopifyService
         private PendingRequest $client
     ) {}
 
+    /**
+     * Fetches all products from shopify
+     */
     public function getProducts(): \Illuminate\Support\Collection
     {
 
@@ -38,17 +42,22 @@ class ShopifyService
             });
     }
 
+    /**
+     *
+     * @throws ConnectionException
+     * @throws \ErrorException
+     */
     public function checkout(Cart $cart)
     {
 
         //We get a list of all the products
         $products = $this->getProducts();
 
+
         //Get the line items ready for the order taking into account special pricing
+        $line_items = $this->processVolumeRules($products, $cart);
 
         $tax = 0;
-
-        $line_items = $this->processVolumeRules($products, $cart);
         foreach ($line_items as $line_item) {
             $tax += ($line_item['price'] * $line_item['quantity']) / 10;
         }
@@ -92,6 +101,8 @@ class ShopifyService
 
         $responseOrderObject = $response->object()->order;
 
+        //We take the response and simplify it so it can be saved locally
+        //This data will be used to populate our model. On a larger project this could be a more strict class
         return [
             'subtotal' => $responseOrderObject->current_subtotal_price,
             'tax_total' => $responseOrderObject->current_total_tax,

@@ -41,27 +41,23 @@ class CartController extends Controller
             ->setStatusCode(201);
     }
 
+    /**
+     * Fullfils and closes an open cart
+     */
     public function checkout(Request $request, Cart $cart)
     {
 
-        try {
-            if ($cart->status == CartStatus::CLOSED) {
-                throw new \ErrorException("This cart has already been closed and can't be checked out");
-            }
-            $result = $this->shopifyClient->checkout($cart);
-        } catch (\ErrorException $exception) {
-            return response([
-                'status' => 'error',
-                'message' => $exception->getMessage(),
-            ])
-                ->setStatusCode(500);
+        if ($cart->status == CartStatus::CLOSED) {
+            throw new \ErrorException("This cart has already been closed and can't be checked out");
         }
-
+        $result = $this->shopifyClient->checkout($cart);
         $cart->checkout($result);
 
         return CheckoutCartResponse::response($cart);
     }
-
+    /**
+     * Add product to an existing cart
+     */
     public function add(AddCartRequest $request, Cart $cart)
     {
         $cart->addProducts($request->all());
@@ -69,6 +65,9 @@ class CartController extends Controller
         return response(AddCartResponse::response($cart));
     }
 
+    /**
+     * Remove product to an existing cart
+     */
     public function remove(RemoveCartRequest $request, Cart $cart)
     {
         $cart->removeProducts($request->all());

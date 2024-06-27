@@ -26,4 +26,13 @@ return Application::configure(basePath: dirname(__DIR__))
                 ], 404);
             }
         });
+        //Added this exception so the error is pretty in case the cart id doesn't exist
+        $exceptions->render(function (ErrorException $e, Request $request) {
+            if ($request->is('api/*')) {
+                return response()->json([
+                    'status' => 'error',
+                    'message' => $e->getMessage(),
+                ], 500);
+            }
+        });
     })->create();

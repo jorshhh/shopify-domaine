@@ -10,7 +10,7 @@ class ShopifyProvider extends ServiceProvider
 {
 
     /**
-     * Register services.
+     * Register our API provider.
      */
     public function register(): void
     {

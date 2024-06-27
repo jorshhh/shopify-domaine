@@ -27,8 +27,15 @@ class Cart extends Model
         return $cart;
     }
 
+    /**
+     * Adds a product to an existing cart only if it is open
+     */
     public function addProducts(array $products): void
     {
+
+        if ($this->status == CartStatus::CLOSED) {
+            throw new \ErrorException('The cart has already been closed');
+        }
 
         $lineItems = $this->products;
 
@@ -46,8 +53,15 @@ class Cart extends Model
 
     }
 
+    /**
+     * Adds a product to an existing cart only if it is open
+     */
     public function removeProducts(array $products): void
     {
+
+        if ($this->status == CartStatus::CLOSED) {
+            return;
+        }
 
         $lineItems = $this->products;
 
@@ -70,16 +84,19 @@ class Cart extends Model
     }
 
     /**
+     * Updates the cart information with the shopify response
+     */
+    public function checkout($result)
+    {
+        $result['status'] = CartStatus::CLOSED;
+        $this->update($result);
+    }
+
+    /**
      * Returns the related products to this cart
      */
     public function products(): \Illuminate\Database\Eloquent\Relations\HasMany
     {
         return $this->hasMany(CartProduct::class);
-    }
-
-    public function checkout($result)
-    {
-        $result['status'] = CartStatus::CLOSED;
-        $this->update($result);
     }
 }
