@@ -16,9 +16,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('cart_id')->constrained();
             $table->string('product_sku');
-            $table->string('special')->default('');
-            $table->integer('quantity');
-            $table->json('shopify_info')->nullable();
+            $table->integer('quantity')->default(0);
             $table->timestamps();
         });
     }

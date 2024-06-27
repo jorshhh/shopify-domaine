@@ -15,7 +15,7 @@ class GetCartResponse
             'tax_total' => $cart->tax_total,
             'grand_total' => $cart->grand_total,
             'shopify_order_id' => $cart->shopify_order_id,
-            'products' => $cart->products,
+            'products' => $cart->products()->get(['product_sku', 'quantity']),
         ];
 
     }

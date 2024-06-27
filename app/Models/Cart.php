@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\CartStatus;
 use App\Http\Requests\Cart\CreateCartRequest;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -11,6 +12,8 @@ class Cart extends Model
 {
     use HasFactory;
     use SoftDeletes;
+
+    protected $fillable = ['subtotal', 'tax_total', 'grand_total', 'shopify_order_id', 'status'];
 
     /**
      * Creates a new cart from an API request
@@ -72,5 +75,11 @@ class Cart extends Model
     public function products(): \Illuminate\Database\Eloquent\Relations\HasMany
     {
         return $this->hasMany(CartProduct::class);
+    }
+
+    public function checkout($result)
+    {
+        $result['status'] = CartStatus::CLOSED;
+        $this->update($result);
     }
 }

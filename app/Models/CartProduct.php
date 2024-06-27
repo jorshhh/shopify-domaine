@@ -10,7 +10,7 @@ class CartProduct extends Model
     use HasFactory;
 
     protected $fillable = [
-        'product_sku', 'quantity', 'cart_id', 'special', 'shopify_info',
+        'product_sku', 'quantity', 'cart_id', 'special', 'shopify_info', 'total'
     ];
 
     public static function create(Cart $cart, array $product)

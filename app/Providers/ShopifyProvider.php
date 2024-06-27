@@ -3,7 +3,6 @@
 namespace App\Providers;
 
 use App\Services\ShopifyService;
-use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\ServiceProvider;
 
@@ -16,8 +15,9 @@ class ShopifyProvider extends ServiceProvider
     public function register(): void
     {
 
-        $this->app->singleton(ShopifyService::class, function (Application $app) {
+        $this->app->singleton(ShopifyService::class, function () {
             $client = Http::baseUrl(config('services.shopify.store_url'))
+                ->withHeader('Content-Type', 'application/json')
                 ->withHeader('X-Shopify-Access-Token', config('services.shopify.token'));
 
             return new ShopifyService($client);

@@ -11,7 +11,5 @@ enum CartStatus: string
 {
     const CREATED = 'created';
 
-    const SUBMITTED = 'submitted';
-
-    const FINISHED = 'finished';
+    const CLOSED = 'closed';
 }
