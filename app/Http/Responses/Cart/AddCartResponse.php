@@ -4,7 +4,7 @@ namespace App\Http\Responses\Cart;
 
 use App\Models\Cart;
 
-class CreateCartResponse
+class AddCartResponse
 {
     public static function response(Cart $cart)
     {
@@ -15,4 +15,5 @@ class CreateCartResponse
         ];
 
     }
+
 }

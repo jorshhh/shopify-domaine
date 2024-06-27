@@ -15,8 +15,6 @@ class Cart extends Model
     /**
      * Creates a new cart from an API request
      * We are not really using the request but on a real app we would
-     * @param CreateCartRequest $request
-     * @return Cart
      */
     public static function create(CreateCartRequest $request): Cart
     {
@@ -24,6 +22,48 @@ class Cart extends Model
         $cart->save();
 
         return $cart;
+    }
+
+    public function addProducts(array $products): void
+    {
+
+        $lineItems = $this->products;
+
+        foreach ($products as $product) {
+            $lineItem = $lineItems->firstWhere('product_sku', $product['product_sku']);
+
+            if (! $lineItem) {
+                CartProduct::create($this, $product);
+            } else {
+                $lineItem->update([
+                    'quantity' => $lineItem->quantity + $product['quantity'],
+                ]);
+            }
+        }
+
+    }
+
+    public function removeProducts(array $products): void
+    {
+
+        $lineItems = $this->products;
+
+        foreach ($products as $product) {
+            $lineItem = $lineItems->firstWhere('product_sku', $product['product_sku']);
+            if ($lineItem) {
+
+                if ($lineItem->quantity - $product['quantity'] <= 0) {
+                    $lineItem->delete();
+                } else {
+                    $lineItem->update([
+                        'quantity' => $lineItem->quantity - $product['quantity'],
+                    ]);
+                }
+
+            }
+
+        }
+
     }
 
     /**
