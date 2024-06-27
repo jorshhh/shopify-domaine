@@ -11,6 +11,8 @@ class ShopifyProvider extends ServiceProvider
 
     /**
      * Register our API provider.
+     * For a simple project the provider and service is small
+     * But for a larger one I would've used the official Shopify SDK and made a separate package
      */
     public function register(): void
     {

@@ -32,7 +32,7 @@ return Application::configure(basePath: dirname(__DIR__))
                 return response()->json([
                     'status' => 'error',
                     'message' => $e->getMessage(),
-                ], 500);
+                ], 422);
             }
         });
     })->create();

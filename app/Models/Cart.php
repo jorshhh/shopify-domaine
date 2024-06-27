@@ -60,7 +60,7 @@ class Cart extends Model
     {
 
         if ($this->status == CartStatus::CLOSED) {
-            return;
+            throw new \ErrorException('The cart has already been closed');
         }
 
         $lineItems = $this->products;
